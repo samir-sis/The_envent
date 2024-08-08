@@ -1,15 +1,37 @@
+<?php
+session_start(); // Start the session at the beginning
+
+// Check if user is logged in
+$isLoggedIn = isset($_SESSION['user_name']);
+$userName = $isLoggedIn ? $_SESSION['user_name'] : null;
+
+// default language is English
+if (!isset($_SESSION['lang'])) {
+  $_SESSION['lang'] = 'en';
+}
+
+// check if language is passed as a GET parameter
+if (isset($_GET['lang'])) {
+  $_SESSION['lang'] = $_GET['lang'];
+}
+
+// load the language file
+$lang = $_SESSION['lang'];
+$translations = include "lang/{$lang}.php";
+?>
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
   <meta charset="utf-8">
   <meta content="width=device-width, initial-scale=1.0" name="viewport">
-  <title>Index - TheEvent Bootstrap Template</title>
+  <title>la Conférence
+  Internationale d'Affaires à Tunis</title>
   <meta content="" name="description">
   <meta content="" name="keywords">
 
   <!-- Favicons -->
-  <link href="assets/img/favicon.png" rel="icon">
+  <link href="assets/img/logo.png" rel="icon">
   <link href="assets/img/apple-touch-icon.png" rel="apple-touch-icon">
 
   <!-- Fonts -->
@@ -40,393 +62,366 @@
 
 <body class="index-page">
 
-  <header id="header" class="header d-flex align-items-center fixed-top">
+<header id="header" class="header d-flex align-items-center fixed-top">
     <div class="container-fluid container-xl position-relative d-flex align-items-center">
-      <a href="index.html" class="logo d-flex align-items-center me-auto">
-        <img src="assets/img/logo.png" alt="">
-        <!-- Uncomment the line below if you also wish to use a text logo -->
-        <!-- <h1 class="sitename">TheEvent</h1> -->
-      </a>
+        <a href="index.php" class="logo d-flex align-items-center me-auto">
+            <img src="assets/img/logo.png" alt="Logo">
+        </a>
 
-      <nav id="navmenu" class="navmenu">
-        <ul>
-          <li><a href="#hero" class="active">Accueil<br></a></li>
-          <li><a href="#speakers">Intervenants</a></li>
-          <li><a href="#schedule">Programme</a></li>
-          <li><a href="#venue">Lieu</a></li>
-          <li><a href="#hotels">Hôtels</a></li>  
-          <li><a href="#gallery">Galerie</a></li>
-          <li><a href="#contact">Contact</a></li>
-        </ul>
-        <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
-      </nav>
+        <nav id="navmenu" class="navmenu">
+            <ul>
+                <li><a href="#hero" class="active"><?= $translations['home'] ?><br></a></li>
+                <li><a href="#speakers"><?= $translations['speakers'] ?></a></li>
+                <li><a href="#schedule"><?= $translations['schedule'] ?></a></li>
+                <li><a href="#venue"><?= $translations['venue'] ?></a></li>
+                <li><a href="#hotels"><?= $translations['hotels'] ?></a></li>
+                <li><a href="#gallery"><?= $translations['gallery'] ?></a></li>
+                <li><a href="#contact"><?= $translations['contact'] ?></a></li>
+            </ul>
+            <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
+        </nav>
 
-      <!-- Language Dropdown -->
-      <div class="dropdown ms-3">
-        <button class="btn btn-light dropdown-toggle" type="button" id="languageDropdown" data-bs-toggle="dropdown"
-          aria-expanded="false">
-          <img src="https://upload.wikimedia.org/wikipedia/commons/a/a5/Flag_of_the_United_Kingdom_%281-2%29.svg"
-            class="me-2" style="width: 20px; height: auto;"> En
-        </button>
-        <ul class="dropdown-menu" aria-labelledby="languageDropdown">
-          <li><a class="dropdown-item" href="#"><img
-                src="https://www.theflagshop.co.uk/media/catalog/product/cache/1aa45e34d8351bef7860daeb50e7952c/f/r/france-flag-8x5.gif"
-                class="me-2" style="width: 20px; height: auto;">FR</a></li>
-          <li><a class="dropdown-item" href="#"><img
-                src="https://static.vecteezy.com/system/resources/thumbnails/011/571/229/small_2x/circle-flag-of-tunisia-free-png.png"
-                class="me-2" style="width: 20px; height: auto;">AR</a></li>
+        <!-- Call-to-Action Buttons -->
+        <div class="cta-buttons d-none d-sm-block" id="cta-buttons">
+            <?php if ($isLoggedIn): ?>
+                <a class="cta-btn" href="#buy-tickets"><?= $translations['buy_tickets'] ?></a>
+                <a class="cta-btn ms-2" href="logout.php"><?= $translations['log_out'] ?> (<?= htmlspecialchars($userName); ?>)</a>
+            <?php else: ?>
+                <a class="cta-btn" href="#buy-tickets"><?= $translations['buy_tickets'] ?></a>
+                <a class="cta-btn ms-2" href="signup.html"><?= $translations['register'] ?></a>
+                <a class="cta-btn ms-2" href="signin.html"><?= $translations['login'] ?></a>
+            <?php endif; ?>
+        </div>
 
-        </ul>
-      </div>
-
-      <a class="cta-btn d-none d-sm-block" href="#buy-tickets">Buy Tickets</a>
+        <!-- Language Dropdown -->
+        <div class="dropdown ms-2">
+            <button class="btn btn-light dropdown-toggle" type="button" id="languageDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/a/a5/Flag_of_the_United_Kingdom_%281-2%29.svg" class="me-2" style="width: 20px; height: auto;"> <?= $translations['en'] ?>
+            </button>
+            <ul class="dropdown-menu" aria-labelledby="languageDropdown">
+                <li><a class="dropdown-item" href="?lang=en"><img src="https://upload.wikimedia.org/wikipedia/commons/a/a5/Flag_of_the_United_Kingdom_%281-2%29.svg" class="me-2" style="width: 20px; height: auto;"> <?= $translations['en'] ?></a></li>
+                <li><a class="dropdown-item" href="?lang=fr"><img src="https://www.theflagshop.co.uk/media/catalog/product/cache/1aa45e34d8351bef7860daeb50e7952c/f/r/france-flag-8x5.gif" class="me-2" style="width: 20px; height: auto;"> <?= $translations['fr'] ?></a></li>
+                <li><a class="dropdown-item" href="?lang=ar"><img src="https://static.vecteezy.com/system/resources/thumbnails/011/571/229/small_2x/circle-flag-of-tunisia-free-png.png" class="me-2" style="width: 20px; height: auto;"> <?= $translations['ar'] ?></a></li>
+            </ul>
+        </div>
     </div>
-  </header>
+</header>
+
 
 
   <main class="main">
 
     <!-- Hero Section -->
     <section id="hero" class="hero section dark-background">
-
-      <img src="assets/img/background.png" alt="" data-aos="fade-in" class="">
-
-      <div class="container d-flex flex-column align-items-center text-center mt-auto">
-        <h2 data-aos="fade-up" data-aos-delay="100" class="">la Conférence <br><span>Internationale </span> d'Affaires à
-          Tunis</h2>
-        <p data-aos="fade-up" data-aos-delay="200">7-8 Novembre,Golden Tulip Gammarth, Tunis</p>
-        <div data-aos="fade-up" data-aos-delay="300" class="">
-          <a href="https://www.youtube.com/watch?v=VgONzCp2KxY" class="glightbox pulsating-play-btn mt-3"></a>
+        <img src="assets/img/background.png" alt="" data-aos="fade-in" class="">
+        <div class="container d-flex flex-column align-items-center text-center mt-auto">
+            <h2 data-aos="fade-up" data-aos-delay="100" class="">
+                <?php echo $translations['conference_title']; ?>
+            </h2>
+            <p data-aos="fade-up" data-aos-delay="200">
+                <?php echo $translations['conference_date']; ?>
+            </p>
+            <div data-aos="fade-up" data-aos-delay="300" class="">
+                <a href="https://www.youtube.com/watch?v=VgONzCp2KxY" class="glightbox pulsating-play-btn mt-3"></a>
+            </div>
         </div>
-      </div>
 
-      <div class="about-info mt-auto position-relative">
-
-        <div class="container position-relative" data-aos="fade-up">
-          <div class="row">
-            <div class="col-lg-6">
-              <h2>À propos de l'événement </h2>
-              <p>Nous sommes ravis de vous annoncer la tenue de la Conférence Internationale d'Affaires, un événement de
-                premier plan qui se déroulera en novembre au Golden Tulip Gammarth, Tunis. Inspirée par le succès des
-                plus grandes conférences mondiales, cette rencontre réunira des leaders d'opinion, des investisseurs, et
-                des décideurs de divers secteurs, offrant une plateforme idéale pour explorer des opportunités de
-                partenariat et d'investissement.</p>
+        <div class="about-info mt-auto position-relative">
+            <div class="container position-relative" data-aos="fade-up">
+                <div class="row">
+                    <div class="col-lg-6">
+                        <h2><?php echo $translations['about_event']; ?></h2>
+                        <p><?php echo $translations['event_description']; ?></p>
+                    </div>
+                    <div class="col-lg-3">
+                        <h3><?php echo $translations['where']; ?></h3>
+                        <p><?php echo $translations['golden_tulip']; ?></p>
+                    </div>
+                    <div class="col-lg-3">
+                        <h3><?php echo $translations['when']; ?></h3>
+                        <p><?php echo $translations['dates']; ?></p>
+                    </div>
+                </div>
             </div>
-            <div class="col-lg-3">
-              <h3>Où ? </h3>
-              <p>Golden Tulip Gammarth, Tunis</p>
-            </div>
-            <div class="col-lg-3">
-              <h3>Quand ?</h3>
-              <p>Du vendredi au samedi, <br>les 7 et 8 novembre.</p>
-
-            </div>
-          </div>
         </div>
-      </div>
-
-    </section><!-- /Hero Section -->
+    </section>
 
     <!-- Speakers Section -->
     <section id="speakers" class="speakers section">
 
-      <!-- Section Title -->
-      <div class="container section-title" data-aos="fade-up">
-        <h2>Event Speakers<br></h2>
+<!-- Section Title -->
+<div class="container section-title" data-aos="fade-up">
+  <h2><?php echo $translations['speakers_section_title']; ?><br></h2>
+</div><!-- End Section Title -->
 
-      </div><!-- End Section Title -->
-
-      <div class="container text-center">
-        <div class="row gy-3 justify-content-center">
-          <div class="col-xl-3 col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="100">
-            <div class="member">
-              <img src="assets/img/speakers/speaker-1.jpg" class="img-fluid" alt="">
-              <div class="member-info">
-                <div class="member-info-content">
-                  <h4><a href="speaker-details.html">Mehrez Mejri</a></h4>
-                  <span>Directeur Commercial & éclairagiste</span>
-                </div>
-                <div class="social">
-                  <a href="https://www.linkedin.com/in/neila-sfar-b30215279/"><i class="bi bi-linkedin"></i></a>
-                </div>
-              </div>
-            </div>
-          </div><!-- End Team Member -->
-
-          <div class="col-xl-3 col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="200">
-            <div class="member">
-              <img src="assets/img/speakers/speaker-2.jpg" class="img-fluid" alt="">
-              <div class="member-info">
-                <div class="member-info-content">
-                  <h4><a href="speaker-details.html">Samir Aissaoui</a></h4>
-                  <span>CEO, Expert IT</span>
-                </div>
-                <div class="social">
-                  <a href="https://www.linkedin.com/in/samir-aissaoui-11606771/"><i class="bi bi-linkedin"></i></a>
-                </div>
-              </div>
-            </div>
-          </div><!-- End Team Member -->
-
-          <div class="col-xl-3 col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="300">
-            <div class="member">
-              <img src="assets/img/speakers/speaker-3.jpg" class="img-fluid" alt="">
-              <div class="member-info">
-                <div class="member-info-content">
-                  <h4><a href="speaker-details.html">Dr Neila Sfar</a></h4>
-                  <span>Figure clé du commerce international et des projets d'affaires</span>
-                </div>
-                <div class="social">
-                  <a href="https://www.linkedin.com/in/mehrez-mejri-38931570/"><i class="bi bi-linkedin"></i></a>
-                </div>
-              </div>
-            </div>
-          </div><!-- End Team Member -->
-
+<div class="container text-center">
+  <div class="row gy-3 justify-content-center">
+    <div class="col-xl-3 col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="100">
+      <div class="member">
+        <img src="assets/img/speakers/speaker-1.jpg" class="img-fluid" alt="">
+        <div class="member-info">
+          <div class="member-info-content">
+            <h4><a href="speaker-details.html"><?php echo $translations['speaker_1_name']; ?></a></h4>
+            <span><?php echo $translations['speaker_1_title']; ?></span>
+          </div>
+          <div class="social">
+            <a href="<?php echo $translations['speaker_1_linkedin']; ?>"><i class="bi bi-linkedin"></i></a>
+          </div>
         </div>
       </div>
+    </div><!-- End Team Member -->
 
+    <div class="col-xl-3 col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="200">
+      <div class="member">
+        <img src="assets/img/speakers/speaker-2.jpg" class="img-fluid" alt="">
+        <div class="member-info">
+          <div class="member-info-content">
+            <h4><a href="speaker-details.html"><?php echo $translations['speaker_2_name']; ?></a></h4>
+            <span><?php echo $translations['speaker_2_title']; ?></span>
+          </div>
+          <div class="social">
+            <a href="<?php echo $translations['speaker_2_linkedin']; ?>"><i class="bi bi-linkedin"></i></a>
+          </div>
+        </div>
+      </div>
+    </div><!-- End Team Member -->
 
-    </section><!-- /Speakers Section -->
+    <div class="col-xl-3 col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="300">
+      <div class="member">
+        <img src="assets/img/speakers/speaker-3.jpg" class="img-fluid" alt="">
+        <div class="member-info">
+          <div class="member-info-content">
+            <h4><a href="speaker-details.html"><?php echo $translations['speaker_3_name']; ?></a></h4>
+            <span><?php echo $translations['speaker_3_title']; ?></span>
+          </div>
+          <div class="social">
+            <a href="<?php echo $translations['speaker_3_linkedin']; ?>"><i class="bi bi-linkedin"></i></a>
+          </div>
+        </div>
+      </div>
+    </div><!-- End Team Member -->
+
+  </div>
+</div>
+
+</section><!-- /Speakers Section -->
 
     <!-- Schedule Section -->
     <section id="schedule" class="schedule section">
 
-      <!-- Section Title -->
-      <div class="container section-title" data-aos="fade-up">
-        <h2>Event program
-          <br>
-        </h2>
-      </div><!-- End Section Title -->
+    <!-- Section Title -->
+    <div class="container section-title" data-aos="fade-up">
+        <h2><?php echo $translations['schedule_section_title']; ?><br></h2>
+    </div><!-- End Section Title -->
 
-      <div class="container">
+    <div class="container">
 
         <ul class="nav nav-tabs" role="tablist" data-aos="fade-up" data-aos-delay="100">
-          <li class="nav-item">
-            <a class="nav-link active" href="#day-1" role="tab" data-bs-toggle="tab">Jour 1</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#day-2" role="tab" data-bs-toggle="tab">Jour 2</a>
-          </li>
-
+            <li class="nav-item">
+                <a class="nav-link active" href="#day-1" role="tab" data-bs-toggle="tab"><?php echo $translations['day_1']; ?></a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#day-2" role="tab" data-bs-toggle="tab"><?php echo $translations['day_2']; ?></a>
+            </li>
         </ul>
 
         <div class="tab-content row justify-content-center" data-aos="fade-up" data-aos-delay="200">
 
-          <h3 class="sub-heading">Programme du Congrès</h3>
+            <h3 class="sub-heading"><?php echo $translations['schedule_section_title']; ?></h3>
 
-          <!-- Schedule Day 1 -->
-          <div role="tabpanel" class="col-lg-9 tab-pane fade show active" id="day-1">
+            <!-- Schedule Day 1 -->
+            <div role="tabpanel" class="col-lg-9 tab-pane fade show active" id="day-1">
 
-            <div class="row schedule-item">
-              <div class="col-md-2"><time>Arrivée</time></div>
-              <div class="col-md-10">
-                <h4>Arrivée à l'aéroport (Tunis-Carthage)</h4>
-                <p>Accueil VIP avec véhicules de luxe et chauffeurs professionnels pour un transfert confortable vers
-                  l'hôtel.</p>
-              </div>
-            </div>
+                <div class="row schedule-item">
+                    <div class="col-md-2"><time><?php echo $translations['arrival']; ?></time></div>
+                    <div class="col-md-10">
+                        <h4><?php echo $translations['arrival']; ?></h4>
+                        <p><?php echo $translations['arrival_description']; ?></p>
+                    </div>
+                </div>
 
-            <div class="row schedule-item">
-              <div class="col-md-2"><time>10:00 AM</time></div>
-              <div class="col-md-10">
-                <h4>Enregistrement à l'hôtel</h4>
-                <p>Accueil par une équipe d'hôtesses pour guider les invités et faciliter l'enregistrement.</p>
-              </div>
-            </div>
+                <div class="row schedule-item">
+                    <div class="col-md-2"><time>10:00 AM</time></div>
+                    <div class="col-md-10">
+                        <h4><?php echo $translations['hotel_check_in']; ?></h4>
+                        <p><?php echo $translations['hotel_check_in_description']; ?></p>
+                    </div>
+                </div>
 
-            <div class="row schedule-item">
-              <div class="col-md-2"><time>12:00 PM</time></div>
-              <div class="col-md-10">
-                <h4>Cérémonie d'ouverture</h4>
-                <p>Discours d'ouverture par des personnalités importantes, y compris le Président de la République
-                  tunisienne (confirmation en attente).</p>
-              </div>
-            </div>
+                <div class="row schedule-item">
+                    <div class="col-md-2"><time>12:00 PM</time></div>
+                    <div class="col-md-10">
+                        <h4><?php echo $translations['opening_ceremony']; ?></h4>
+                        <p><?php echo $translations['opening_ceremony_description']; ?></p>
+                    </div>
+                </div>
 
-            <div class="row schedule-item">
-              <div class="col-md-2"><time>01:00 PM</time></div>
-              <div class="col-md-10">
-                <h4>Déjeuner</h4>
-                <p>Repas officiel avec opportunités de réseautage informel.</p>
-              </div>
-            </div>
+                <div class="row schedule-item">
+                    <div class="col-md-2"><time>01:00 PM</time></div>
+                    <div class="col-md-10">
+                        <h4><?php echo $translations['lunch']; ?></h4>
+                        <p><?php echo $translations['lunch_description']; ?></p>
+                    </div>
+                </div>
 
-            <div class="row schedule-item">
-              <div class="col-md-2"><time>03:00 PM</time></div>
-              <div class="col-md-10">
-                <h4>Présentation des Sociétés</h4>
-                <p>Discours de bienvenue par la Présidente du congrès, présentation des entreprises participantes et des
-                  initiatives liées à la réinsertion des compétences.</p>
-              </div>
-            </div>
+                <div class="row schedule-item">
+                    <div class="col-md-2"><time>03:00 PM</time></div>
+                    <div class="col-md-10">
+                        <h4><?php echo $translations['company_presentations']; ?></h4>
+                        <p><?php echo $translations['company_presentations_description']; ?></p>
+                    </div>
+                </div>
 
-            <div class="row schedule-item">
-              <div class="col-md-2"><time>04:30 PM</time></div>
-              <div class="col-md-10">
-                <h4>Assemblée Générale</h4>
-                <p>Réunion avec les participants et les représentants des entreprises pour discuter des activités
-                  principales et des perspectives futures.</p>
-              </div>
-            </div>
+                <div class="row schedule-item">
+                    <div class="col-md-2"><time>04:30 PM</time></div>
+                    <div class="col-md-10">
+                        <h4><?php echo $translations['general_assembly']; ?></h4>
+                        <p><?php echo $translations['general_assembly_description']; ?></p>
+                    </div>
+                </div>
 
-          </div><!-- End Schedule Day 1 -->
+            </div><!-- End Schedule Day 1 -->
 
-          <!-- Schedule Day 2 -->
-          <div role="tabpanel" class="col-lg-9 tab-pane fade" id="day-2">
+            <!-- Schedule Day 2 -->
+            <div role="tabpanel" class="col-lg-9 tab-pane fade" id="day-2">
 
-            <div class="row schedule-item">
-              <div class="col-md-2"><time>09:00 AM</time></div>
-              <div class="col-md-10">
-                <h4>Ateliers Spécialisés</h4>
-                <p>
-                  <strong>Investissement Commercial:</strong> Focus sur les stratégies d'import-export.<br>
-                  <strong>Investissement Médias:</strong> Exploration des nouvelles opportunités dans les médias.<br>
-                  <strong>Investissement Touristique:</strong> Stratégies pour le développement du tourisme.<br>
-                  <strong>Investissement Industriel:</strong> Innovations dans le secteur industriel.<br>
-                  <strong>Investissement Agricole:</strong> Techniques modernes dans l'agriculture.<br>
-                  <strong>Investissement en Services:</strong> Banques, assurances, et services connexes.
-                </p>
-              </div>
-            </div>
+                <div class="row schedule-item">
+                    <div class="col-md-2"><time>09:00 AM</time></div>
+                    <div class="col-md-10">
+                        <h4><?php echo $translations['specialized_workshops']; ?></h4>
+                        <p><?php echo $translations['specialized_workshops_description']; ?></p>
+                    </div>
+                </div>
 
-            <div class="row schedule-item">
-              <div class="col-md-2"><time>02:00 PM</time></div>
-              <div class="col-md-10">
-                <h4>Sessions d'Information et Réseautage</h4>
-                <p>Discussions détaillées sur les secteurs d'investissement spécifiques et opportunités de réseautage.
-                </p>
-              </div>
-            </div>
+                <div class="row schedule-item">
+                    <div class="col-md-2"><time>02:00 PM</time></div>
+                    <div class="col-md-10">
+                        <h4><?php echo $translations['information_sessions']; ?></h4>
+                        <p><?php echo $translations['information_sessions_description']; ?></p>
+                    </div>
+                </div>
 
-          </div><!-- End Schedule Day 2 -->
+            </div><!-- End Schedule Day 2 -->
 
-          <!-- Schedule Day 3 -->
-          <div role="tabpanel" class="col-lg-9 tab-pane fade" id="day-3">
-            <!-- Informations à ajouter -->
-          </div><!-- End Schedule Day 3 -->
+            <!-- Schedule Day 3 -->
+            <div role="tabpanel" class="col-lg-9 tab-pane fade" id="day-3">
+                <!-- Information to be added -->
+            </div><!-- End Schedule Day 3 -->
 
-          <!-- Schedule Day 4 -->
-          <div role="tabpanel" class="col-lg-9 tab-pane fade" id="day-4">
-            <!-- Informations à ajouter -->
-          </div><!-- End Schedule Day 4 -->
+            <!-- Schedule Day 4 -->
+            <div role="tabpanel" class="col-lg-9 tab-pane fade" id="day-4">
+                <!-- Information to be added -->
+            </div><!-- End Schedule Day 4 -->
 
         </div>
 
-      </div>
+    </div>
 
-    </section><!-- /Schedule Section -->
+</section>
+<!-- /Schedule Section -->
 
     <!-- Venue Section -->
     <section id="venue" class="venue section">
 
-      <!-- Section Title -->
-      <div class="container section-title" data-aos="fade-up">
-        <h2>Lieu de l'événement<br></h2>
-        <p>Ses besoins sont satisfaits malgré quelque fuite de quelque chose, et il est en effet nécessaire de viser un
-          objectif précis avec une certaine sensibilité.</p>
-      </div><!-- End Section Title -->
+    <!-- Section Title -->
+    <div class="container section-title" data-aos="fade-up">
+        <h2><?php echo $translations['venue_section_title']; ?><br></h2>
+        <p><?php echo $translations['venue_description']; ?></p>
+    </div><!-- End Section Title -->
 
-      <div class="container-fluid" data-aos="fade-up">
+    <div class="container-fluid" data-aos="fade-up">
 
         <div class="row g-0">
-          <div class="col-lg-6 venue-map">
-            <iframe
-              src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d48389.78314118045!2d10.2987!3d36.8904!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x13c09bdb21ef0919%3A0x88bb5bb2d6a1aa35!2sGolden%20Tulip%20Gammarth!5e0!3m2!1sen!2sus!4v1676961268712!5m2!1sen!2sus"
-              frameborder="0" style="border:0" allowfullscreen=""></iframe>
-          </div>
-
-          <div class="col-lg-6 venue-info">
-            <div class="row justify-content-center">
-              <div class="col-11 col-lg-8 position-relative">
-                <h3>Pourquoi Participer ?</h3>
-                <p>La Conférence Internationale d'Affaires à Tunis est le rendez-vous incontournable pour les
-                  entreprises cherchant à se développer à l'international. En vous joignant à nous, vous aurez
-                  l'occasion de :
-
-                  Établir des Partenariats : Engagez des discussions fructueuses pour des collaborations futures.
-                  Explorer des Marchés Internationaux : Identifiez de nouvelles opportunités pour étendre vos opérations
-                  à l’échelle mondiale.
-                  Acquérir des Connaissances : Obtenez des informations pratiques et stratégiques pour optimiser vos
-                  démarches commerciales et d’investissement.</p>
-              </div>
+            <div class="col-lg-6 venue-map">
+                <iframe
+                  src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d48389.78314118045!2d10.2987!3d36.8904!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x13c09bdb21ef0919%3A0x88bb5bb2d6a1aa35!2sGolden%20Tulip%20Gammarth!5e0!3m2!1sen!2sus!4v1676961268712!5m2!1sen!2sus"
+                  frameborder="0" style="border:0" allowfullscreen=""></iframe>
             </div>
-          </div>
+
+            <div class="col-lg-6 venue-info">
+                <div class="row justify-content-center">
+                    <div class="col-11 col-lg-8 position-relative">
+                        <h3><?php echo $translations['why_participate']; ?></h3>
+                        <p><?php echo $translations['why_participate_description']; ?></p>
+                    </div>
+                </div>
+            </div>
         </div>
 
-      </div>
+    </div>
 
-      <div class="container-fluid venue-gallery-container" data-aos="fade-up" data-aos-delay="100">
+    <div class="container-fluid venue-gallery-container" data-aos="fade-up" data-aos-delay="100">
         <div class="row g-0">
 
-          <div class="col-lg-3 col-md-4">
-            <div class="venue-gallery">
-              <a href="assets/img/venue-gallery/venue-gallery-1.jpg" class="glightbox" data-gall="venue-gallery">
-                <img src="assets/img/venue-gallery/venue-gallery-1.jpg" alt="" class="img-fluid">
-              </a>
+            <div class="col-lg-3 col-md-4">
+                <div class="venue-gallery">
+                    <a href="assets/img/venue-gallery/venue-gallery-1.jpg" class="glightbox" data-gall="venue-gallery">
+                        <img src="assets/img/venue-gallery/venue-gallery-1.jpg" alt="" class="img-fluid">
+                    </a>
+                </div>
             </div>
-          </div>
 
-          <div class="col-lg-3 col-md-4">
-            <div class="venue-gallery">
-              <a href="assets/img/venue-gallery/venue-gallery-2.jpg" class="glightbox" data-gall="venue-gallery">
-                <img src="assets/img/venue-gallery/venue-gallery-2.jpg" alt="" class="img-fluid">
-              </a>
+            <div class="col-lg-3 col-md-4">
+                <div class="venue-gallery">
+                    <a href="assets/img/venue-gallery/venue-gallery-2.jpg" class="glightbox" data-gall="venue-gallery">
+                        <img src="assets/img/venue-gallery/venue-gallery-2.jpg" alt="" class="img-fluid">
+                    </a>
+                </div>
             </div>
-          </div>
 
-          <div class="col-lg-3 col-md-4">
-            <div class="venue-gallery">
-              <a href="assets/img/venue-gallery/venue-gallery-3.jpg" class="glightbox" data-gall="venue-gallery">
-                <img src="assets/img/venue-gallery/venue-gallery-3.jpg" alt="" class="img-fluid">
-              </a>
+            <div class="col-lg-3 col-md-4">
+                <div class="venue-gallery">
+                    <a href="assets/img/venue-gallery/venue-gallery-3.jpg" class="glightbox" data-gall="venue-gallery">
+                        <img src="assets/img/venue-gallery/venue-gallery-3.jpg" alt="" class="img-fluid">
+                    </a>
+                </div>
             </div>
-          </div>
 
-          <div class="col-lg-3 col-md-4">
-            <div class="venue-gallery">
-              <a href="assets/img/venue-gallery/venue-gallery-4.jpg" class="glightbox" data-gall="venue-gallery">
-                <img src="assets/img/venue-gallery/venue-gallery-4.jpg" alt="" class="img-fluid">
-              </a>
+            <div class="col-lg-3 col-md-4">
+                <div class="venue-gallery">
+                    <a href="assets/img/venue-gallery/venue-gallery-4.jpg" class="glightbox" data-gall="venue-gallery">
+                        <img src="assets/img/venue-gallery/venue-gallery-4.jpg" alt="" class="img-fluid">
+                    </a>
+                </div>
             </div>
-          </div>
 
-          <div class="col-lg-3 col-md-4">
-            <div class="venue-gallery">
-              <a href="assets/img/venue-gallery/venue-gallery-5.jpg" class="glightbox" data-gall="venue-gallery">
-                <img src="assets/img/venue-gallery/venue-gallery-5.jpg" alt="" class="img-fluid">
-              </a>
+            <div class="col-lg-3 col-md-4">
+                <div class="venue-gallery">
+                    <a href="assets/img/venue-gallery/venue-gallery-5.jpg" class="glightbox" data-gall="venue-gallery">
+                        <img src="assets/img/venue-gallery/venue-gallery-5.jpg" alt="" class="img-fluid">
+                    </a>
+                </div>
             </div>
-          </div>
 
-          <div class="col-lg-3 col-md-4">
-            <div class="venue-gallery">
-              <a href="assets/img/venue-gallery/venue-gallery-6.jpg" class="glightbox" data-gall="venue-gallery">
-                <img src="assets/img/venue-gallery/venue-gallery-6.jpg" alt="" class="img-fluid">
-              </a>
+            <div class="col-lg-3 col-md-4">
+                <div class="venue-gallery">
+                    <a href="assets/img/venue-gallery/venue-gallery-6.jpg" class="glightbox" data-gall="venue-gallery">
+                        <img src="assets/img/venue-gallery/venue-gallery-6.jpg" alt="" class="img-fluid">
+                    </a>
+                </div>
             </div>
-          </div>
 
-          <div class="col-lg-3 col-md-4">
-            <div class="venue-gallery">
-              <a href="assets/img/venue-gallery/venue-gallery-7.jpg" class="glightbox" data-gall="venue-gallery">
-                <img src="assets/img/venue-gallery/venue-gallery-7.jpg" alt="" class="img-fluid">
-              </a>
+            <div class="col-lg-3 col-md-4">
+                <div class="venue-gallery">
+                    <a href="assets/img/venue-gallery/venue-gallery-7.jpg" class="glightbox" data-gall="venue-gallery">
+                        <img src="assets/img/venue-gallery/venue-gallery-7.jpg" alt="" class="img-fluid">
+                    </a>
+                </div>
             </div>
-          </div>
 
-          <div class="col-lg-3 col-md-4">
-            <div class="venue-gallery">
-              <a href="assets/img/venue-gallery/venue-gallery-8.jpg" class="glightbox" data-gall="venue-gallery">
-                <img src="assets/img/venue-gallery/venue-gallery-8.jpg" alt="" class="img-fluid">
-              </a>
+            <div class="col-lg-3 col-md-4">
+                <div class="venue-gallery">
+                    <a href="assets/img/venue-gallery/venue-gallery-8.jpg" class="glightbox" data-gall="venue-gallery">
+                        <img src="assets/img/venue-gallery/venue-gallery-8.jpg" alt="" class="img-fluid">
+                    </a>
+                </div>
             </div>
-          </div>
 
         </div>
-      </div>
+    </div>
 
-    </section><!-- /Venue Section -->
+</section>
+<!-- /Venue Section -->
 
     <!-- Hotels Section -->
     <section id="hotels" class="hotels section">
@@ -954,6 +949,48 @@
 
   <!-- Preloader -->
   <div id="preloader"></div>
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      // Get the user's name from URL parameters
+      const urlParams = new URLSearchParams(window.location.search);
+      const userName = urlParams.get('user');
+
+      if (userName) {
+        const ctaButtons = document.getElementById('cta-buttons');
+        ctaButtons.innerHTML = `
+                <a class="cta-btn" href="#buy-tickets">Buy Tickets</a>
+                <a class="cta-btn ms-2" href="logout.php">Log Out (${userName})</a>
+            `;
+      }
+    });
+
+    if (localStorage.getItem('user_token')) {
+            document.querySelector('.cta-buttons').innerHTML = `
+                <a class="cta-btn" href="#buy-tickets">Buy Tickets</a>
+                <a class="cta-btn ms-2" href="logout.php">Log Out</a>
+            `;
+        }
+
+        // Example of handling token storage on signup (client-side code needed)
+        // localStorage.setItem('user_token', 'your_generated_token_here');
+
+        document.addEventListener('DOMContentLoaded', function() {
+    // Check if user token exists in cookies (or local storage)
+    if (document.cookie.includes('user_token')) {
+        // If token exists, user is considered logged in
+        document.querySelector('.cta-buttons').innerHTML = `
+            <a class="cta-btn" href="#buy-tickets">Buy Tickets</a>
+            <a class="cta-btn ms-2" href="logout.php">Log Out</a>
+        `;
+    }
+
+    // Logout button event
+    document.querySelector('a[href="logout.php"]').addEventListener('click', function() {
+        document.cookie = 'user_token=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/'; // Remove token from cookies
+    });
+});
+
+  </script>
 
   <!-- Vendor JS Files -->
   <script src="assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>

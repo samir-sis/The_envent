@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <title>Sign Up - TheEvent Bootstrap Template</title>
+    <meta content="" name="description">
+    <meta content="" name="keywords">
+
+    <!-- Favicons -->
+    <link href="assets/img/favicon.png" rel="icon">
+    <link href="assets/img/apple-touch-icon.png" rel="apple-touch-icon">
+
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com" rel="preconnect">
+    <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+
+    <!-- Vendor CSS Files -->
+    <link href="assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
+
+    <!-- Main CSS File -->
+    <link href="assets/css/main.css" rel="stylesheet">
+
+    <style>
+        /* Add your CSS styles here */
+        body {
+            background-color: #f8f9fa;
+            font-family: 'Roboto', sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        .header {
+            background-color: rgba(0, 123, 255, 0.7);
+            padding: 20px 0;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            position: absolute;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .header .logo img {
+            height: 60px;
+        }
+
+        .main-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: calc(100vh - 80px);
+            padding: 40px;
+            margin-top: 80px;
+        }
+
+        .form-container {
+            background: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+            padding: 40px;
+            max-width: 600px;
+            width: 100%;
+        }
+
+        .form-container h1 {
+            margin-bottom: 30px;
+            font-size: 32px;
+            font-weight: 700;
+            color: #333;
+            text-align: center;
+            line-height: 1.4;
+        }
+
+        .form-container .form-label {
+            font-weight: 500;
+            color: #333;
+        }
+
+        .form-container .form-control,
+        .form-container .form-select {
+            border-radius: 8px;
+            border: 1px solid #ddd;
+            padding: 14px;
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .form-container .form-control:focus,
+        .form-container .form-select:focus {
+            border-color: #007bff;
+            box-shadow: 0 0 0 0.2rem rgba(38, 143, 255, 0.25);
+        }
+
+        .form-container .btn-primary {
+            background-color: #007bff;
+            border: none;
+            border-radius: 8px;
+            padding: 14px 24px;
+            font-size: 18px;
+            font-weight: 600;
+            transition: background-color 0.3s ease;
+        }
+
+        .form-container .btn-primary:hover {
+            background-color: #0056b3;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .input-group .input-group-text {
+            background: #ffffff;
+            border: 1px solid #ddd;
+            border-radius: 8px 0 0 8px;
+            padding: 14px;
+        }
+
+        .input-group .form-control {
+            border-radius: 0 8px 8px 0;
+            padding-left: 40px;
+        }
+    </style>
+</head>
+
+<body>
+    <header id="header" class="header d-flex align-items-center fixed-top">
+        <div class="container-fluid d-flex align-items-center justify-content-center">
+            <a href="index.html" class="logo d-flex align-items-center">
+                <img src="assets/img/logo.png" alt="Logo">
+            </a>
+        </div>
+    </header>
+
+    <main class="main-container">
+        <div class="form-container">
+            <h1 class="mb-4">Sign Up</h1>
+            <form id="signup-form" action="signup-handler.php" method="post">
+                <div class="form-group mb-4">
+                    <label for="name" class="form-label">Name</label>
+                    <div class="input-group">
+                        <span class="input-group-text"><i class="bi bi-person"></i></span>
+                        <input type="text" class="form-control" id="name" name="name" required>
+                    </div>
+                </div>
+                <div class="form-group mb-4">
+                    <label for="email" class="form-label">Email address</label>
+                    <div class="input-group">
+                        <span class="input-group-text"><i class="bi bi-envelope"></i></span>
+                        <input type="email" class="form-control" id="email" name="email" required>
+                    </div>
+                </div>
+                <div class="form-group mb-4">
+                    <label for="password" class="form-label">Password</label>
+                    <input type="password" class="form-control" id="password" name="password" required>
+                </div>
+                <div class="form-group mb-4">
+                    <label for="phone" class="form-label">Phone</label>
+                    <div class="input-group">
+                        <span id="phone-prefix" class="input-group-text">+1</span>
+                        <input type="tel" class="form-control" id="phone" name="phone" required>
+                    </div>
+                </div>
+                <div class="form-group mb-4">
+                    <label for="country" class="form-label">Country</label>
+                    <select id="country" name="country" class="form-select" required>
+                        <!-- Options will be populated by JavaScript -->
+                    </select>
+                </div>
+                <div class="form-group mb-4">
+                    <label for="company" class="form-label">Company (Optional)</label>
+                    <input type="text" class="form-control" id="company" name="company">
+                </div>
+                <button type="submit" class="btn btn-primary">Sign Up</button>
+            </form>
+        </div>
+    </main>
+
+    <!-- Vendor JS Files -->
+    <script src="assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="assets/vendor/bootstrap-icons/bootstrap-icons.js"></script>
+
+    <!-- Main JS File -->
+    <script src="assets/js/main.js"></script>
+
+    <!-- Country API Integration Script -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            fetch('https://restcountries.com/v3.1/all')
+                .then(response => response.json())
+                .then(data => {
+                    const select = document.getElementById('country');
+                    const phonePrefix = document.getElementById('phone-prefix');
+                    const phoneInput = document.getElementById('phone');
+
+                    if (Array.isArray(data)) {
+                        data.forEach(country => {
+                            const countryCode = country.cca2;
+                            const countryName = country.name.common;
+                            const phoneCode = country.idd ? (country.idd.root + (country.idd.suffixes[0] || '')) : '';
+
+                            // Create option element
+                            const option = document.createElement('option');
+                            option.value = countryCode;
+                            option.textContent = `${countryName} (+${phoneCode})`;
+                            select.appendChild(option);
+                        });
+
+                        // Update phone input with country code when country changes
+                        select.addEventListener('change', function () {
+                            const selectedCountry = data.find(c => c.cca2 === this.value);
+                            const selectedPhoneCode = selectedCountry?.idd ? (selectedCountry.idd.root + (selectedCountry.idd.suffixes[0] || '')) : '';
+                            phonePrefix.textContent = `+${selectedPhoneCode}`;
+                            phoneInput.value = `${selectedPhoneCode} `;
+                        });
+                    }
+                })
+                .catch(error => console.error('Error fetching country data:', error));
+        });
+
+        document.addEventListener('DOMContentLoaded', function () {
+            const nameInput = document.getElementById('name');
+            const emailInput = document.getElementById('email');
+            const nameValidationImg = document.getElementById('name-validation');
+            const emailValidationImg = document.getElementById('email-validation');
+
+            function validateName(name) {
+                // Simple name validation: non-empty and letters only
+                return /^[a-zA-Z\s]+$/.test(name);
+            }
+
+            function validateEmail(email) {
+                // Simple email validation: basic regex pattern
+                return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+            }
+
+            nameInput.addEventListener('input', function () {
+                if (validateName(nameInput.value)) {
+                    nameValidationImg.src = 'path/to/valid-image.png'; // Replace with the path to your valid image
+                    nameValidationImg.style.display = 'inline';
+                } else {
+                    nameValidationImg.src = 'path/to/invalid-image.png'; // Replace with the path to your invalid image
+                    nameValidationImg.style.display = 'inline';
+                }
+            });
+
+            emailInput.addEventListener('input', function () {
+                if (validateEmail(emailInput.value)) {
+                    emailValidationImg.src = 'path/to/valid-image.png'; // Replace with the path to your valid image
+                    emailValidationImg.style.display = 'inline';
+                } else {
+                    emailValidationImg.src = 'path/to/invalid-image.png'; // Replace with the path to your invalid image
+                    emailValidationImg.style.display = 'inline';
+                }
+            });
+        });
+    </script>
+
+</body>
+
+</html>
