@@ -46,5 +46,6 @@ return [
     'venue_description' => 'Its needs are met despite some leakage, and it is indeed necessary to aim for a precise goal with a certain sensitivity.',
     'why_participate' => 'Why Participate?',
     'why_participate_description' => 'The International Business Conference in Tunis is a must-attend event for companies looking to expand internationally. By joining us, you will have the opportunity to: <br> - Establish Partnerships: Engage in fruitful discussions for future collaborations. <br> - Explore International Markets: Identify new opportunities to expand your operations globally. <br> - Acquire Knowledge: Gain practical and strategic insights to optimize your business and investment approaches.',
+    'hello' =>'hello',
 ];
 ?>
